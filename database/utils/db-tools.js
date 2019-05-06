@@ -1,5 +1,5 @@
 const fs = require("fs");
-const filename = "../database.sqlite";
+const filename = "database/database.sqlite";
 const sqlite3 = require("sqlite3").verbose();
 
 function resetDataBase() {

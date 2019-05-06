@@ -3,10 +3,14 @@ CREATE TABLE projects (
     title TEXT NOT NULL,
     details TEXT,
     price NUMBER,
-    required_day TEXT,
-    project_length NUMBER
+    deadline TEXT,
+    project_length NUMBER,
     hirer_id NUMBER,
-    created_date TEXT
-)
+    created_date TEXT,
+    updated_date TEXT
+);
 
-
+INSERT INTO projects
+    (title, details, price)
+VALUES
+    ("test", "check details", 10);
