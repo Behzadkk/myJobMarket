@@ -20,7 +20,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE applications (
-    application_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     project_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     FOREIGN KEY

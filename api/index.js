@@ -106,7 +106,6 @@ router.put("/projects/:id", function(req, res) {
     updatedDetails += ` project_length = ${editingProject.project_length},`;
   }
   updatedDetails += ` updated_date = "${new Date().toISOString()}" WHERE id = ?`;
-  console.log(updatedDetails);
   db.run(updatedDetails, [id], function(err) {
     if (err) {
       console.log("ERROR fetching from the database:", err);
@@ -235,4 +234,42 @@ router.get("/users/:id/projects/", function(req, res) {
     });
   });
 });
+
+// apply for a project
+router.post("/applications", function(req, res) {
+  const application = req.body;
+
+  // it should check if the user id exist
+  // ??
+  const insert = `INSERT INTO applications (project_id, user_id) VALUES ($project_id, $user_id)`;
+  db.run(
+    insert,
+    {
+      $project_id: application.projectId,
+      $user_id: application.userId
+    },
+    function(err) {
+      if (err) {
+        console.log("ERROR fetching from the database:", err);
+        return;
+      }
+      console.log("Request succeeded, new data inserted, id =", this.lastID);
+    }
+  );
+  res.sendStatus(200);
+});
+// cancel an application
+router.delete("/applications/:id", function(req, res) {
+  const id = req.params.id;
+  const sql = `DELETE FROM applications WHERE id = ${id}`;
+  db.run(sql, [], err => {
+    if (err) {
+      console.log("ERROR fetching from the database:", err);
+      return;
+    }
+    console.log("Request succeeded, data erased");
+    res.sendStatus(200);
+  });
+});
+
 module.exports = router;
