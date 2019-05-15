@@ -1,20 +1,22 @@
 const db = require("../helper/sqlDB").createDB();
-const resHandler = require("../helper/resHandler").resHandler;
+const resHandler = require("../helper/resHandler");
+const postReqHandler = require("../helper/postReqHandler");
+const putReqHandler = require("../helper/putReqHandler");
+const getHandler = require("../helper/getHandler");
+const getById = require("../helper/getById").getById;
 
 exports.getProjects = (req, res) => {
-  const sql = "SELECT * FROM projects";
-  db.all(sql, [], (err, rows) => {
-    resHandler(err, rows);
-    res.status(200).json({
-      project: rows
-    });
-  });
+  getHandler.getHandler(res, "projects");
+};
+
+exports.getProjectById = (req, res) => {
+  const id = req.params.id;
+  getById(res, "projects", id);
 };
 
 exports.searchProjects = (req, res) => {
   const title = req.params.title;
   const sql = `SELECT * FROM projects WHERE title like '%${title}%'`;
-  console.log(sql);
   db.all(sql, [], (err, rows) => {
     resHandler(err, rows);
     res.status(200).json({
@@ -33,23 +35,14 @@ exports.createProject = (req, res) => {
     "hirer_id",
     "created_date"
   ];
-
-  const project = req.body;
-  const insertValues = Object.keys(project).reduce((acc, prop) => {
-    acc[`$${prop}`] = project[prop];
-    return acc;
-  }, {});
-  let insert = `INSERT INTO projects (${safeParams.join(", ")})`;
-  insert += `VALUES (${safeParams.map(param => `$${param}`).join(", ")})`;
-  db.run(
-    insert,
-    { ...insertValues, $created_date: new Date().toISOString() },
-    (err, rows) => {
-      resHandler(err, rows);
-    }
-  );
+  const insert = postReqHandler.postReqQuery("project", safeParams);
+  const insertValues = postReqHandler.postValuesHandler(req);
+  db.run(insert, { ...insertValues }, (err, rows) => {
+    resHandler(err, rows);
+  });
   res.sendStatus(200);
 };
+
 exports.updateProject = (req, res) => {
   const safeParams = [
     "title",
@@ -59,16 +52,8 @@ exports.updateProject = (req, res) => {
     "project_length"
   ];
 
-  const id = req.params.id;
-  const editingProject = req.body;
-  let updatedDetails = "UPDATE projects SET ";
-  safeParams.forEach(par => {
-    if (editingProject[par]) {
-      updatedDetails += ` ${par} = "${editingProject[par]}",`;
-    }
-  });
-  updatedDetails += ` updated_date = "${new Date().toISOString()}" WHERE id = ?`;
-  db.run(updatedDetails, [id], (err, rows) => {
+  const updatedDetails = putReqHandler.updateStatement(req, safeParams);
+  db.run(updatedDetails, [req.params.id], (err, rows) => {
     resHandler(err, rows);
   });
   res.sendStatus(200);

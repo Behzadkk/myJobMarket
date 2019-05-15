@@ -13,6 +13,7 @@ const applicationController = require("../controllers/applications-controller");
 // projects
 router.get("/projects", projectController.getProjects);
 router.get("/projects/title/:title", projectController.searchProjects);
+router.get("/projects/:id", projectController.getProjectById);
 router.post("/projects/", projectController.createProject);
 router.put("/projects/:id", projectController.updateProject);
 router.delete("/projects/:id", projectController.deleteProject);
