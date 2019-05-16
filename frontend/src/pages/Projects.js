@@ -45,7 +45,7 @@ class ProjectsPage extends Component {
     const requestBody = { ...project };
     console.log(requestBody);
 
-    fetch("http://localhost:5000/api/projects", {
+    fetch("/api/projects", {
       method: "POST",
       body: JSON.stringify(requestBody),
       headers: {
@@ -71,7 +71,7 @@ class ProjectsPage extends Component {
   };
 
   fetchProjects = () => {
-    fetch("http://localhost:5000/api/projects")
+    fetch("/api/projects")
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error("Failed!");

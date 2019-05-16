@@ -32,7 +32,7 @@ class LoginPage extends Component {
       password: password
     };
 
-    fetch("http://localhost:5000/api/users", {
+    fetch("/api/users", {
       method: "POST",
       body: JSON.stringify(requestBody),
       headers: {

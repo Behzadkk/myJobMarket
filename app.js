@@ -27,4 +27,6 @@ app.use("/api", apiRouter);
 app.get("/", (req, res, next) => {
   res.send("Hello World!");
 });
-app.listen(5000, () => console.log("Server started at port 5000"));
+
+const port = process.env.PORT || 5000;
+app.listen(port, () => console.log("Server started at port 5000"));
