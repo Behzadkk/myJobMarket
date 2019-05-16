@@ -1,5 +1,5 @@
 const db = require("../helper/sqlDB").createDB();
-const resHandler = require("../helper/resHandler");
+const resHandler = require("../helper/resHandler").resHandler;
 const postReqHandler = require("../helper/postReqHandler");
 const putReqHandler = require("../helper/putReqHandler");
 const getHandler = require("../helper/getHandler");
@@ -37,6 +37,7 @@ exports.createProject = (req, res) => {
   ];
   const insert = postReqHandler.postReqQuery("project", safeParams);
   const insertValues = postReqHandler.postValuesHandler(req);
+  console.log(insert, insertValues);
   db.run(insert, { ...insertValues }, (err, rows) => {
     resHandler(err, rows);
   });

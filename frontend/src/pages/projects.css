@@ -1,0 +1,22 @@
+.projects-control {
+  text-align: center;
+  border: 1px solid #1d304f;
+  padding: 1rem;
+  margin: 2rem auto;
+  width: 30rem;
+  max-width: 80%;
+}
+
+.projects__table {
+  width: 40rem;
+  max-width: 90%;
+  margin: 2rem auto;
+  list-style: none;
+  padding: 0;
+}
+
+.projects__rows {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #1d304f;
+}
