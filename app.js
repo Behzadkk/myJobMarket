@@ -12,7 +12,7 @@ const app = express();
 
 // handle HTTP POST requests
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "frontend")));
+app.use(express.static(path.join(__dirname, "frontend/build")));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
@@ -25,8 +25,8 @@ app.use((req, res, next) => {
 
 app.use("/api", apiRouter);
 
-app.get("/", (req, res, next) => {
-  res.send("Hello World!");
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/frontend/build/index.html"));
 });
 
 const port = process.env.PORT || 5000;
