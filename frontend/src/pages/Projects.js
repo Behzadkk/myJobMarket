@@ -2,12 +2,16 @@ import React, { Component } from "react";
 
 import Modal from "../components/Modal/Modal";
 import Backdrop from "../components/Backdrop/Backdrop";
+import ProjectsList from "../components/Projects/ProjectsList/ProjectsList";
+import Spinner from "../components/Spinner/Spinner";
 import "./projects.css";
 
 class ProjectsPage extends Component {
   state = {
     creating: false,
-    projects: []
+    projects: [],
+    isLoading: false,
+    selectedProject: null
   };
   constructor(props) {
     super(props);
@@ -60,6 +64,19 @@ class ProjectsPage extends Component {
       })
       .then(data => {
         this.fetchProjects();
+        // this.setState(prevState => {
+        //   const updatedProjects = [...prevState.projects];
+        //   updatedProjects.push({
+        //     id: data.id,
+        //     title: data.title,
+        //     price: data.price,
+        //     deadline: data.deadline,
+        //     project_length: data.project_length,
+        //     details: data.details,
+        //     hirer_id: data.hirer_id
+        //   });
+        //   return { projects: updatedProjects };
+        // });
       })
       .catch(err => {
         console.log(err);
@@ -67,10 +84,11 @@ class ProjectsPage extends Component {
   };
 
   modalCancelHandler = () => {
-    this.setState({ creating: false });
+    this.setState({ creating: false, selectedProject: null });
   };
 
   fetchProjects = () => {
+    this.setState({ isLoading: true });
     fetch("/api/projects")
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
@@ -79,7 +97,42 @@ class ProjectsPage extends Component {
         return res.json();
       })
       .then(resData => {
-        this.setState({ projects: resData.tableName });
+        this.setState({ projects: resData.tableName, isLoading: false });
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ isLoading: false });
+      });
+  };
+
+  showDetailHandler = id => {
+    this.setState(prevState => {
+      const selectedProject = prevState.projects.find(
+        project => project.id === id
+      );
+      return { selectedProject: selectedProject };
+    });
+  };
+
+  modalApplyHandler = () => {
+    const requestBody = {
+      projectId: this.state.selectedProject.id,
+      userId: Math.floor(Math.random() * 5)
+    };
+
+    fetch("/api/applications", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed!");
+        }
+        this.setState({ selectedProject: null });
+        return res;
       })
       .catch(err => {
         console.log(err);
@@ -87,16 +140,9 @@ class ProjectsPage extends Component {
   };
 
   render() {
-    const projectsList = this.state.projects.map(project => {
-      return (
-        <li key={project.id} className="projects__rows">
-          {project.title}
-        </li>
-      );
-    });
     return (
       <React.Fragment>
-        {this.state.creating && <Backdrop />}
+        {(this.state.creating || this.state.selectedProject) && <Backdrop />}
         {this.state.creating && (
           <Modal
             title="Define a Project"
@@ -104,6 +150,7 @@ class ProjectsPage extends Component {
             canConfirm
             onCancel={this.modalCancelHandler}
             onConfirm={this.modalConfirmHandler}
+            confirmText="Confirm"
           >
             <form>
               <div className="form-control">
@@ -138,13 +185,51 @@ class ProjectsPage extends Component {
             </form>
           </Modal>
         )}
+        {this.state.selectedProject && (
+          <Modal
+            title={this.state.selectedProject.title}
+            canCancel
+            canConfirm
+            onCancel={this.modalCancelHandler}
+            onConfirm={this.modalApplyHandler}
+            confirmText="Apply"
+          >
+            <h1>Price : £{this.state.selectedProject.price}</h1>
+            <h2>Needs to be done by: {this.state.selectedProject.deadline}</h2>
+            <h2>It's a {this.state.selectedProject.project_length}-day job</h2>
+            <p>{this.state.selectedProject.details}</p>
+            <p>This project is created {this.state.selectedProject.hirer_id}</p>
+            <p>"for now it shows id"</p>
+            <p>
+              This project is defined on{" "}
+              {new Date(
+                this.state.selectedProject.created_date
+              ).toLocaleDateString()}
+            </p>
+            {this.state.selectedProject.updated_date && (
+              <p>
+                and updated on{" "}
+                {new Date(
+                  this.state.selectedProject.updated_date
+                ).toLocaleDateString()}
+              </p>
+            )}
+          </Modal>
+        )}
         <div className="projects-control">
           <p>Introduce your new project!</p>
           <button className="btn" onClick={this.startDefineProjectHandler}>
             Define a Project
           </button>
         </div>
-        <ul className="projects__table">{projectsList}</ul>
+        {this.state.isLoading ? (
+          <Spinner />
+        ) : (
+          <ProjectsList
+            projects={this.state.projects}
+            onViewDetail={this.showDetailHandler}
+          />
+        )}
       </React.Fragment>
     );
   }
