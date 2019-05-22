@@ -1,12 +1,12 @@
 const db = require("../helper/sqlDB").createDB();
-const resHandler = require("../helper/resHandler").resHandler;
-const postReqHandler = require("../helper/postReqHandler");
-const putReqHandler = require("../helper/putReqHandler");
-const getHandler = require("../helper/getHandler");
-const getById = require("../helper/getById").getById;
+const { resHandler } = require("../helper/resHandler");
+const { postReqQuery, postValuesHandler } = require("../helper/postReqHandler");
+const { putReqHandler } = require("../helper/putReqHandler");
+const { getHandler } = require("../helper/getHandler");
+const { getById } = require("../helper/getById");
 
 exports.getProjects = (req, res) => {
-  getHandler.getHandler(res, "projects");
+  getHandler(res, "projects");
 };
 
 exports.getProjectById = (req, res) => {
@@ -25,7 +25,7 @@ exports.searchProjects = (req, res) => {
   });
 };
 
-exports.createProject = (req, res) => {
+exports.createProject = function(req, res) {
   const safeParams = [
     "title",
     "details",
@@ -35,13 +35,11 @@ exports.createProject = (req, res) => {
     "hirer_id",
     "created_date"
   ];
-  const insert = postReqHandler.postReqQuery("project", safeParams);
-  const insertValues = postReqHandler.postValuesHandler(req);
-  console.log(insert, insertValues);
-  db.run(insert, { ...insertValues }, (err, rows) => {
-    resHandler(err, rows);
+  const insert = postReqQuery("project", safeParams);
+  const insertValues = postValuesHandler(req);
+  db.run(insert, { ...insertValues }, function(err, rows) {
+    getById(res, "projects", this.lastID);
   });
-  res.sendStatus(200);
 };
 
 exports.updateProject = (req, res) => {
@@ -53,11 +51,10 @@ exports.updateProject = (req, res) => {
     "project_length"
   ];
 
-  const updatedDetails = putReqHandler.updateStatement(req, safeParams);
-  db.run(updatedDetails, [req.params.id], (err, rows) => {
-    resHandler(err, rows);
+  const updatedDetails = putReqHandler(req, safeParams);
+  db.run(updatedDetails, [req.params.id], function(err, rows) {
+    getById(res, "projects", req.params.id);
   });
-  res.sendStatus(200);
 };
 
 exports.deleteProject = (req, res) => {
@@ -66,5 +63,5 @@ exports.deleteProject = (req, res) => {
   db.run(sql, [], (err, rows) => {
     resHandler(err, rows);
   });
-  res.sendStatus(200);
+  res.send(id);
 };

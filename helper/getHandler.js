@@ -6,7 +6,7 @@ exports.getHandler = (response, tableName) => {
   db.all(sql, [], (err, rows) => {
     resHandler(err, rows);
     response.status(200).json({
-      tableName: rows
+      [tableName]: rows
     });
   });
 };

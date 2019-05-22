@@ -1,4 +1,4 @@
-exports.updateStatement = (req, safeParams) => {
+exports.putReqHandler = (req, safeParams) => {
   const editingProject = req.body;
   let updatedDetails = "UPDATE projects SET ";
   safeParams.forEach(par => {

@@ -97,7 +97,7 @@ class ProjectsPage extends Component {
         return res.json();
       })
       .then(resData => {
-        this.setState({ projects: resData.tableName, isLoading: false });
+        this.setState({ projects: resData.projects, isLoading: false });
       })
       .catch(err => {
         console.log(err);

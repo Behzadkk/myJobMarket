@@ -6,7 +6,7 @@ exports.getById = (response, tableName, id) => {
   db.all(sql, [id], (err, rows) => {
     resHandler(err, rows);
     response.status(200).json({
-      tableName: rows
+      [tableName]: rows
     });
   });
 };
