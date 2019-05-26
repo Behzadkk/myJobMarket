@@ -37,7 +37,7 @@ class ApplicationsPage extends Component {
         ) : (
           <ul>
             {this.state.applications.map(app => (
-              <li key={app.id}>{app.id}</li>
+              <li key={app.appId}>{app.appId}</li>
             ))}
           </ul>
         )}

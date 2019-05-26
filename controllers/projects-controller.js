@@ -6,12 +6,27 @@ const { getHandler } = require("../helper/getHandler");
 const { getById } = require("../helper/getById");
 
 exports.getProjects = (req, res) => {
-  getHandler(res, "projects");
+  // getHandler(res, "projects");
+  const sql = `SELECT projects.*, users.email FROM projects JOIN users ON projects.hirer_id=users.userId
+  `;
+  db.all(sql, [], (err, rows) => {
+    resHandler(err, rows);
+    res.status(200).json({
+      projects: rows
+    });
+  });
 };
 
 exports.getProjectById = (req, res) => {
   const id = req.params.id;
-  getById(res, "projects", id);
+  // getById(res, "projects", id);
+  const sql = `SELECT * FROM projects JOIN users ON projects.hirer_id=users.id WHERE projects.projectId = ?`;
+  db.all(sql, [id], (err, rows) => {
+    resHandler(err, rows);
+    res.status(200).json({
+      projects: rows
+    });
+  });
 };
 
 exports.searchProjects = (req, res) => {
@@ -26,6 +41,9 @@ exports.searchProjects = (req, res) => {
 };
 
 exports.createProject = function(req, res) {
+  if (!req.isAuth) {
+    throw new Error("Unauthenticated");
+  }
   const safeParams = [
     "title",
     "details",
@@ -43,6 +61,9 @@ exports.createProject = function(req, res) {
 };
 
 exports.updateProject = (req, res) => {
+  if (!req.isAuth) {
+    throw new Error("Unauthenticated");
+  }
   const safeParams = [
     "title",
     "details",
@@ -58,8 +79,11 @@ exports.updateProject = (req, res) => {
 };
 
 exports.deleteProject = (req, res) => {
+  if (!req.isAuth) {
+    throw new Error("Unauthenticated");
+  }
   const id = req.params.id;
-  const sql = `DELETE FROM projects WHERE id = ${id}`;
+  const sql = `DELETE FROM projects WHERE projectId = ${id}`;
   db.run(sql, [], (err, rows) => {
     resHandler(err, rows);
   });

@@ -1,5 +1,5 @@
 CREATE TABLE projects (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    projectId INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     details TEXT,
     price NUMBER,
@@ -10,25 +10,25 @@ CREATE TABLE projects (
     updated_date TEXT,
     FOREIGN KEY
 (hirer_id) REFERENCES users
-(id)
+(userId)
 );
 
 CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT NOT NULL,
     password TEXT NOT NULL
 );
 
 CREATE TABLE applications (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    appId INTEGER PRIMARY KEY AUTOINCREMENT,
     project_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     FOREIGN KEY
 (project_id) REFERENCES projects
-(id),
+(ProjectId),
     FOREIGN KEY
 (user_id) REFERENCES users
-(id)
+(userId)
 );
 
 -- INSERT INTO projects

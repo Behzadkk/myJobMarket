@@ -47,8 +47,6 @@ class ProjectsPage extends Component {
       hirer_id
     };
     const requestBody = { ...project };
-    console.log(requestBody);
-
     fetch("/api/projects", {
       method: "POST",
       body: JSON.stringify(requestBody),
@@ -108,7 +106,7 @@ class ProjectsPage extends Component {
   showDetailHandler = id => {
     this.setState(prevState => {
       const selectedProject = prevState.projects.find(
-        project => project.id === id
+        project => project.projectId === id
       );
       return { selectedProject: selectedProject };
     });
@@ -116,7 +114,7 @@ class ProjectsPage extends Component {
 
   modalApplyHandler = () => {
     const requestBody = {
-      projectId: this.state.selectedProject.id,
+      projectId: this.state.selectedProject.projectId,
       userId: Math.floor(Math.random() * 5)
     };
 
@@ -198,8 +196,7 @@ class ProjectsPage extends Component {
             <h2>Needs to be done by: {this.state.selectedProject.deadline}</h2>
             <h2>It's a {this.state.selectedProject.project_length}-day job</h2>
             <p>{this.state.selectedProject.details}</p>
-            <p>This project is created {this.state.selectedProject.hirer_id}</p>
-            <p>"for now it shows id"</p>
+            <p>This project is created by {this.state.selectedProject.email}</p>
             <p>
               This project is defined on{" "}
               {new Date(

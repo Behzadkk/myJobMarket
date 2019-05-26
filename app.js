@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 const apiRouter = require("./api");
+const isAuth = require("./middleware/isAuth");
 
 const app = express();
 // const router = express.Router();
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
   }
   next();
 });
+app.use(isAuth);
 
 app.use("/api", apiRouter);
 

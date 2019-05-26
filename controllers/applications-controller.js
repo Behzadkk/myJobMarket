@@ -11,6 +11,9 @@ exports.getApplications = (req, res) => {
   });
 };
 exports.createApplication = (req, res) => {
+  if (!req.isAuth) {
+    throw new Error("Unauthenticated");
+  }
   const application = req.body;
   const insert = `INSERT INTO applications (project_id, user_id) VALUES (${
     application.projectId
@@ -22,8 +25,11 @@ exports.createApplication = (req, res) => {
 };
 
 exports.cancelApplication = (req, res) => {
+  if (!req.isAuth) {
+    throw new Error("Unauthenticated");
+  }
   const id = req.params.id;
-  const sql = `DELETE FROM applications WHERE id = ${id}`;
+  const sql = `DELETE FROM applications WHERE appId = ${id}`;
   db.run(sql, [], (err, rows) => {
     resHandler(err, rows);
   });

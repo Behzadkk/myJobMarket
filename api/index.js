@@ -22,6 +22,7 @@ router.delete("/projects/:id", projectController.deleteProject);
 router.get("/users", userController.getUsers);
 router.get("/users/:id", userController.userProfile);
 router.post("/users", userController.createUser);
+router.post("/login", userController.userLogin);
 
 // UPDATE  a user
 // DELETE a user

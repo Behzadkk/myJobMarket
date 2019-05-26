@@ -7,8 +7,8 @@ const ProjectsList = props => {
   const projects = props.projects.map(project => {
     return (
       <ProjectsItem
-        key={project.id}
-        id={project.id}
+        key={project.projectId}
+        projectId={project.projectId}
         title={project.title}
         price={project.price}
         createdDate={new Date(project.created_date).toLocaleDateString()}
