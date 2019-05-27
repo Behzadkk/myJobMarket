@@ -17,35 +17,35 @@ exports.getUsers = (req, res) => {
 };
 
 exports.createUser = function(req, res) {
-  // const { email } = req.body;
-  // const sql = "SELECT * FROM users WHERE email =?";
-  // db.get(sql, [email], (err, rows) => {
-  //   if (err) {
-  //     return res.status(500).send("Error on the server.");
-  //   }
-  //   if (rows) {
-  //     return res.status(404).send("User Already exist!!");
-  //   }
-  let user = {};
-  bcrypt
-    .hash(req.body.password, 12)
-    .then(hashedPassword => {
-      user.email = req.body.email;
-      user.password = hashedPassword;
-      return user;
-    })
-    .then(user => {
-      const insert = `INSERT INTO users (email, password) VALUES ("${
-        user.email
-      }", "${user.password}")`;
-      db.run(insert, {}, function(err, rows) {
-        getById(res, "users", this.lastID);
+  const { email } = req.body;
+  const sql = "SELECT * FROM users WHERE email =?";
+  db.get(sql, [email], (err, rows) => {
+    if (err) {
+      return res.status(500).send("Error on the server.");
+    }
+    if (rows) {
+      return res.status(404).send("User Already exist!!");
+    }
+    let user = {};
+    bcrypt
+      .hash(req.body.password, 12)
+      .then(hashedPassword => {
+        user.email = req.body.email;
+        user.password = hashedPassword;
+        return user;
+      })
+      .then(user => {
+        const insert = `INSERT INTO users (email, password) VALUES ("${
+          user.email
+        }", "${user.password}")`;
+        db.run(insert, {}, function(err, rows) {
+          getById(res, "users", this.lastID);
+        });
+      })
+      .catch(err => {
+        throw err;
       });
-    })
-    .catch(err => {
-      throw err;
-    });
-  // });
+  });
 };
 
 exports.userProfile = (req, res) => {

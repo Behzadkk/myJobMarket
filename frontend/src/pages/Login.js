@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 
+import AuthContext from "../context/authContext";
+
 import "./Login.css";
 
 class LoginPage extends Component {
   state = {
     isLogin: true
   };
+
+  static contextType = AuthContext;
+
   constructor(props) {
     super(props);
     this.emailInput = React.createRef();
@@ -32,7 +37,12 @@ class LoginPage extends Component {
       password: password
     };
 
-    fetch("/api/users", {
+    let api = "/api/login";
+
+    if (!this.state.isLogin) {
+      api = "/api/users";
+    }
+    fetch(api, {
       method: "POST",
       body: JSON.stringify(requestBody),
       headers: {
@@ -44,6 +54,11 @@ class LoginPage extends Component {
           throw new Error("Failed!");
         }
         return res.json();
+      })
+      .then(resData => {
+        if (resData.token) {
+          this.context.login(resData.token, resData.userId);
+        }
       })
       .catch(err => {
         console.log(err);
