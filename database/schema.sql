@@ -20,9 +20,10 @@ CREATE TABLE users (
 );
 
 CREATE TABLE applications (
-    appId INTEGER PRIMARY KEY AUTOINCREMENT,
+    applicationId INTEGER PRIMARY KEY AUTOINCREMENT,
     project_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
+    applied_date TEXT NOT NULL,
     FOREIGN KEY
 (project_id) REFERENCES projects
 (ProjectId),

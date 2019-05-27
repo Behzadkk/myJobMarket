@@ -118,16 +118,21 @@ class ProjectsPage extends Component {
   };
 
   modalApplyHandler = () => {
+    if (!this.context.token) {
+      this.setState({ selectedProject: null });
+      return;
+    }
     const requestBody = {
       projectId: this.state.selectedProject.projectId,
-      userId: Math.floor(Math.random() * 5)
+      userId: this.context.userId
     };
 
     fetch("/api/applications", {
       method: "POST",
       body: JSON.stringify(requestBody),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.context.token
       }
     })
       .then(res => {
@@ -191,7 +196,7 @@ class ProjectsPage extends Component {
             canConfirm
             onCancel={this.modalCancelHandler}
             onConfirm={this.modalApplyHandler}
-            confirmText="Apply"
+            confirmText={this.context.token ? "Apply" : "OK"}
           >
             <h1>Price : £{this.state.selectedProject.price}</h1>
             <h2>Needs to be done by: {this.state.selectedProject.deadline}</h2>

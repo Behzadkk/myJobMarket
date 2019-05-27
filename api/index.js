@@ -31,6 +31,6 @@ router.post("/login", userController.userLogin);
 router.get("/applications", applicationController.getApplications);
 router.post("/applications", applicationController.createApplication);
 // cancel an application
-router.delete("/applications/:id", applicationController.cancelApplication);
+router.delete("/applications", applicationController.cancelApplication);
 
 module.exports = router;
