@@ -31,7 +31,8 @@ body {
 }
 
 .form-actions button:hover,
-.form-actions button:active .btn:hover,
+.form-actions button:active,
+.btn:hover,
 .btn:active {
   background: #253f68;
   border-color: #253f68;

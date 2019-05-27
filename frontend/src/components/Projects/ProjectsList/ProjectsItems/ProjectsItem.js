@@ -10,12 +10,20 @@ const ProjectsItem = props => (
       </h2>
     </div>
     <div>
-      <button
-        className="btn"
-        onClick={props.onDetail.bind(this, props.projectId)}
-      >
-        View Details
-      </button>
+      {props.userId === props.hirerId ? (
+        <div>
+          <button className="btn">Edit</button>
+          <button className="btn">Delete</button>
+          {/* these buttons needs some handler to PUT and DELETE from database */}
+        </div>
+      ) : (
+        <button
+          className="btn"
+          onClick={props.onDetail.bind(this, props.projectId)}
+        >
+          View Details
+        </button>
+      )}
     </div>
   </li>
 );

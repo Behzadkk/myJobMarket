@@ -8,11 +8,14 @@
   padding: 0 1rem;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
 }
 
 .main-nav__logo h1 {
   margin: 0;
   font-size: 1.5rem;
+  color: #dfcefc;
 }
 
 .main-nav__items {
@@ -30,12 +33,24 @@
   margin: 0 1rem;
 }
 
-.main-nav__items a {
+.main-nav__items a,
+.main-nav__items button {
   text-decoration: none;
   color: #fff;
+  padding: 0.25rem 0.5rem;
+  border: none;
+  font: inherit;
+  background: transparent;
+  cursor: pointer;
+  vertical-align: middle;
+  margin: 0;
 }
 
 .main-nav__items a:hover,
-.main-nav__items a:active {
-  color: #c6ed3b;
+.main-nav__items a:active,
+.main-nav__items button:hover,
+.main-nav__items button:active {
+  color: #1d304f;
+  background: #fff;
+  border-radius: 5px;
 }
