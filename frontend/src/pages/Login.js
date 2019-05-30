@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 
 import AuthContext from "../context/authContext";
-
-import "./Login.css";
+import LoginForm from "../components/LoginForm/LoginForm";
 
 class LoginPage extends Component {
   state = {
@@ -67,22 +66,13 @@ class LoginPage extends Component {
 
   render() {
     return (
-      <form className="login-form" onSubmit={this.submitHandler}>
-        <div className="form-control">
-          <label htmlFor="email">E-Mail</label>
-          <input type="email" id="email" ref={this.emailInput} />
-        </div>
-        <div className="form-control">
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" ref={this.passwordInput} />
-        </div>
-        <div className="form-actions">
-          <button type="submit">Submit</button>
-          <button type="button" onClick={this.switchModeHandler}>
-            Switch to {this.state.isLogin ? "Register" : "Log in"}
-          </button>
-        </div>
-      </form>
+      <LoginForm
+        onFormSubmition={this.submitHandler}
+        emailEl={this.emailInput}
+        passwordEl={this.passwordInput}
+        onSwitchMode={this.switchModeHandler}
+        loginState={this.state.isLogin}
+      />
     );
   }
 }

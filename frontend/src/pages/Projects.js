@@ -5,6 +5,9 @@ import Modal from "../components/Modal/Modal";
 import Backdrop from "../components/Backdrop/Backdrop";
 import ProjectsList from "../components/Projects/ProjectsList/ProjectsList";
 import Spinner from "../components/Spinner/Spinner";
+import ProjectForm from "../components/ProjectForm/ProjectForm";
+import ProjectDetails from "../components/ProjectDetails/ProjectDetails";
+import DefineProject from "../components/DefineProject/DefineProject";
 import "./projects.css";
 
 class ProjectsPage extends Component {
@@ -160,33 +163,13 @@ class ProjectsPage extends Component {
             onConfirm={this.modalConfirmHandler}
             confirmText="Confirm"
           >
-            <form>
-              <div className="form-control">
-                <label htmlFor="title">Title</label>
-                <input type="text" id="title" ref={this.titleEl} />
-              </div>
-              <div className="form-control">
-                <label htmlFor="price">Price £</label>
-                <input type="number" id="price" ref={this.priceEl} />
-              </div>
-              <div className="form-control">
-                <label htmlFor="deadline">Deadline</label>
-                <input type="date" id="deadline" ref={this.deadlineEl} />
-              </div>
-              <div className="form-control">
-                <label htmlFor="length">Project's Length (Days)</label>
-                <input type="number" id="length" ref={this.lengthEl} />
-              </div>
-              <div className="form-control">
-                <label htmlFor="details">Details</label>
-                <textarea
-                  type="text"
-                  id="details"
-                  rows="4"
-                  ref={this.detailsEl}
-                />
-              </div>
-            </form>
+            <ProjectForm
+              titleInput={this.titleEl}
+              priceInput={this.priceEl}
+              deadlineInput={this.deadlineEl}
+              lengthInput={this.lengthEl}
+              detailsInput={this.detailsEl}
+            />
           </Modal>
         )}
         {this.state.selectedProject && (
@@ -198,34 +181,11 @@ class ProjectsPage extends Component {
             onConfirm={this.modalApplyHandler}
             confirmText={this.context.token ? "Apply" : "OK"}
           >
-            <h1>Price : £{this.state.selectedProject.price}</h1>
-            <h2>Needs to be done by: {this.state.selectedProject.deadline}</h2>
-            <h2>It's a {this.state.selectedProject.project_length}-day job</h2>
-            <p>{this.state.selectedProject.details}</p>
-            <p>This project is created by {this.state.selectedProject.email}</p>
-            <p>
-              This project is defined on{" "}
-              {new Date(
-                this.state.selectedProject.created_date
-              ).toLocaleDateString()}
-            </p>
-            {this.state.selectedProject.updated_date && (
-              <p>
-                and updated on{" "}
-                {new Date(
-                  this.state.selectedProject.updated_date
-                ).toLocaleDateString()}
-              </p>
-            )}
+            <ProjectDetails selectedProject={this.state.selectedProject} />
           </Modal>
         )}
         {this.context.token && (
-          <div className="projects-control">
-            <p>Introduce your new project!</p>
-            <button className="btn" onClick={this.startDefineProjectHandler}>
-              Define a Project
-            </button>
-          </div>
+          <DefineProject clickHandler={this.startDefineProjectHandler} />
         )}
         {this.state.isLoading ? (
           <Spinner />
