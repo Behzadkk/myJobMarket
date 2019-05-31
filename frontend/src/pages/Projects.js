@@ -15,7 +15,9 @@ class ProjectsPage extends Component {
     creating: false,
     projects: [],
     isLoading: false,
-    selectedProject: null
+    selectedProject: null,
+    editingProject: null,
+    deleting: false
   };
 
   static contextType = AuthContext;
@@ -36,7 +38,7 @@ class ProjectsPage extends Component {
     this.setState({ creating: true });
   };
   modalConfirmHandler = () => {
-    this.setState({ creating: false });
+    this.setState({ creating: false, editingProject: null });
     const title = this.titleEl.current.value;
     const price = +this.priceEl.current.value;
     const deadline = this.deadlineEl.current.value;
@@ -52,10 +54,15 @@ class ProjectsPage extends Component {
       details,
       hirer_id
     };
+    let verb = "POST";
+    if (this.state.editingProject) {
+      verb = "PUT";
+      project.projectId = this.state.editingProject.projectId;
+    }
     const requestBody = { ...project };
     const token = this.context.token;
     fetch("/api/projects", {
-      method: "POST",
+      method: verb,
       body: JSON.stringify(requestBody),
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +77,9 @@ class ProjectsPage extends Component {
       })
       .then(resData => {
         this.setState(prevState => {
-          const updatedProjects = [...prevState.projects];
+          let updatedProjects = prevState.projects.filter(project => {
+            return project.projectId !== resData.projects[0].projectId;
+          });
           updatedProjects.push({
             projectId: resData.projects[0].projectId,
             title: resData.projects[0].title,
@@ -90,7 +99,12 @@ class ProjectsPage extends Component {
   };
 
   modalCancelHandler = () => {
-    this.setState({ creating: false, selectedProject: null });
+    this.setState({
+      creating: false,
+      selectedProject: null,
+      editingProject: null,
+      deleting: false
+    });
   };
 
   fetchProjects = () => {
@@ -118,6 +132,20 @@ class ProjectsPage extends Component {
       );
       return { selectedProject: selectedProject };
     });
+  };
+
+  showEditHandler = id => {
+    this.setState(prevState => {
+      const editingProject = prevState.projects.find(
+        project => project.projectId === id
+      );
+      return { editingProject: editingProject };
+    });
+  };
+
+  showDeleteHandler = id => {
+    this.setState({ deleting: true });
+    this.showDetailHandler(id);
   };
 
   modalApplyHandler = () => {
@@ -150,10 +178,47 @@ class ProjectsPage extends Component {
       });
   };
 
+  ModalDeleteHandler = () => {
+    this.setState({ deleting: true });
+    const projectId = this.state.selectedProject.projectId;
+    fetch("/api/projects", {
+      method: "DELETE",
+      body: JSON.stringify({ projectId: projectId }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.context.token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed!");
+        }
+        return res;
+      })
+      .then(data => {
+        this.setState(prevState => {
+          const updatedProjects = prevState.projects.filter(project => {
+            return project.projectId !== projectId;
+          });
+          return {
+            projects: updatedProjects,
+            deleting: false,
+            selectedProject: null
+          };
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ deleting: false });
+      });
+  };
+
   render() {
     return (
       <React.Fragment>
-        {(this.state.creating || this.state.selectedProject) && <Backdrop />}
+        {(this.state.creating ||
+          this.state.selectedProject ||
+          this.state.editingProject) && <Backdrop />}
         {this.state.creating && (
           <Modal
             title="Define a Project"
@@ -174,7 +239,7 @@ class ProjectsPage extends Component {
         )}
         {this.state.selectedProject && (
           <Modal
-            title={this.state.selectedProject.title}
+            title="Project details"
             canCancel
             canConfirm
             onCancel={this.modalCancelHandler}
@@ -194,7 +259,39 @@ class ProjectsPage extends Component {
             projects={this.state.projects}
             authUserId={this.context.userId}
             onViewDetail={this.showDetailHandler}
+            onViewEdit={this.showEditHandler}
+            onViewDelete={this.showDeleteHandler}
           />
+        )}
+        {this.state.editingProject && (
+          <Modal
+            title="Edit your project"
+            canCancel
+            canConfirm
+            onCancel={this.modalCancelHandler}
+            onConfirm={this.modalConfirmHandler}
+            confirmText="Confirm"
+          >
+            <ProjectForm
+              titleInput={this.titleEl}
+              priceInput={this.priceEl}
+              deadlineInput={this.deadlineEl}
+              lengthInput={this.lengthEl}
+              detailsInput={this.detailsEl}
+            />
+          </Modal>
+        )}
+        {this.state.deleting && (
+          <Modal
+            title="Are you sure about Deleting"
+            canCancel
+            canConfirm
+            onCancel={this.modalCancelHandler}
+            onConfirm={this.ModalDeleteHandler}
+            confirmText="Delete"
+          >
+            <ProjectDetails selectedProject={this.state.selectedProject} />
+          </Modal>
         )}
       </React.Fragment>
     );

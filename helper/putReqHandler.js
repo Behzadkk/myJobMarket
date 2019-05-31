@@ -6,6 +6,7 @@ exports.putReqHandler = (req, safeParams) => {
       updatedDetails += ` ${par} = "${editingProject[par]}",`;
     }
   });
-  updatedDetails += ` updated_date = "${new Date().toISOString()}" WHERE id = ?`;
+  updatedDetails += ` updated_date = "${new Date().toISOString()}" WHERE projectId = ?`;
+  console.log(updatedDetails);
   return updatedDetails;
 };

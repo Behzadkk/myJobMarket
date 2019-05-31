@@ -12,8 +12,15 @@ const ProjectsItem = props => (
     <div>
       {props.userId === props.hirerId ? (
         <div>
-          <button className="btn">Edit</button>
-          <button className="btn">Delete</button>
+          <button className="btn" onClick={() => props.onEdit(props.projectId)}>
+            Edit
+          </button>
+          <button
+            className="btn"
+            onClick={() => props.onDelete(props.projectId)}
+          >
+            Delete
+          </button>
           {/* these buttons needs some handler to PUT and DELETE from database */}
         </div>
       ) : (

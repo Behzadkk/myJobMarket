@@ -73,8 +73,8 @@ exports.updateProject = (req, res) => {
   ];
 
   const updatedDetails = putReqHandler(req, safeParams);
-  db.run(updatedDetails, [req.params.id], function(err, rows) {
-    getById(res, "projects", req.params.id);
+  db.run(updatedDetails, [req.body.projectId], function(err, rows) {
+    getById(res, "projects", req.body.projectId);
   });
 };
 
@@ -82,10 +82,10 @@ exports.deleteProject = (req, res) => {
   if (!req.isAuth) {
     throw new Error("Unauthenticated");
   }
-  const id = req.params.id;
+  const id = req.body.projectId;
   const sql = `DELETE FROM projects WHERE projectId = ${id}`;
   db.run(sql, [], (err, rows) => {
     resHandler(err, rows);
   });
-  res.send(id);
+  res.sendStatus(200);
 };

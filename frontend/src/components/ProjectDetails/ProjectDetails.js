@@ -3,7 +3,8 @@ import React from "react";
 const ProjectDetails = props => {
   return (
     <React.Fragment>
-      <h1>Price : £{props.selectedProject.price}</h1>
+      <h1>Project: {props.selectedProject.title}</h1>
+      <h2>Price : £{props.selectedProject.price}</h2>
       <h2>Needs to be done by: {props.selectedProject.deadline}</h2>
       <h2>It's a {props.selectedProject.project_length}-day job</h2>
       <p>{props.selectedProject.details}</p>

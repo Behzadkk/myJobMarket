@@ -13,6 +13,8 @@ const ProjectsList = props => {
         price={project.price}
         createdDate={new Date(project.created_date).toLocaleDateString()}
         onDetail={props.onViewDetail}
+        onEdit={props.onViewEdit}
+        onDelete={props.onViewDelete}
         userId={props.authUserId}
         hirerId={project.hirer_id}
       />
