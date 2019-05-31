@@ -12,14 +12,14 @@ This project is live at [heroku](https://stormy-caverns-71378.herokuapp.com)
 
 ## Setup
 
-###This will start server at port 7000
+#### This will start server at port 7000
 
 ```bash
 $ npm install # install project dependencies
 $ npm start # start backend application on localhost:7000
 ```
 
-###This will start React server at port 3000
+#### This will start React server at port 3000
 
 ```bash
 $ cd frontend # install project dependencies
