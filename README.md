@@ -22,7 +22,7 @@ $ npm start # start backend application on localhost:7000
 #### This will start React server at port 3000
 
 ```bash
-$ cd frontend # install project dependencies
+$ cd frontend # enters the frontend folder
 $ npm start # start backend application on localhost:7000
 ```
 
