@@ -9,24 +9,25 @@ const MainNavigation = props => (
   <AuthContext.Consumer>
     {context => {
       return (
-        <header className="main-nav">
-          <div className="main-nav__logo">
+        <header className='ui teal three item inverted secondary   menu main-nav'>
+          <div className='main-nav__logo item'>
             <h1>myJobMarket</h1>
           </div>
-          <nav className="main-nav__items">
+          <div className='item' />
+          <nav className='main-nav__items item'>
             <ul>
               {!context.token && (
                 <li>
-                  <NavLink to="./auth">Authorization</NavLink>
+                  <NavLink to='./auth'>Sign in</NavLink>
                 </li>
               )}
               <li>
-                <NavLink to="./projects">Projects</NavLink>
+                <NavLink to='./projects'>Projects</NavLink>
               </li>
               {context.token && (
                 <React.Fragment>
                   <li>
-                    <NavLink to="./applications">Applications</NavLink>
+                    <NavLink to='./applications'>Applications</NavLink>
                   </li>
                   <li>
                     <button onClick={context.logout}>Logout</button>

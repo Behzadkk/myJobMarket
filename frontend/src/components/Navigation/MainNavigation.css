@@ -1,8 +1,9 @@
 .main-nav {
   position: fixed;
-  left: 0;
+  left: -3px;
+
   top: 0;
-  width: 100%;
+  width: 101%;
   height: 3.5rem;
   background-color: #1d304f;
   padding: 0 1rem;
@@ -14,8 +15,8 @@
 
 .main-nav__logo h1 {
   margin: 0;
-  font-size: 1.5rem;
-  color: #dfcefc;
+  font-size: 1.8rem;
+  color: #ffffff;
 }
 
 .main-nav__items {
