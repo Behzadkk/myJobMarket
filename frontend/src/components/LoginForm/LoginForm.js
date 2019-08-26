@@ -11,28 +11,65 @@ const LoginForm = props => {
         <div className='ui vertical divider'>Or</div>
         <div className='middle aligned row'>
           <div className='column'>
-            <form
-              className='ui form login-form'
-              onSubmit={props.onFormSubmition}
-            >
-              <div className=' field form-control'>
-                <label htmlFor='email'>E-Mail</label>
-                <input type='email' id='email' ref={props.emailEl} />
-              </div>
-              <div className='field form-control'>
-                <label htmlFor='password'>Password</label>
-                <input type='password' id='password' ref={props.passwordEl} />
-              </div>
-              <div className='field'>
-                <div className='ui checkbox'>
-                  <input type='checkbox' tabindex='0' className='hidden' />
-                  <label>I agree to the Terms and Conditions</label>
+            <form className='ui large form' onSubmit={props.onFormSubmition}>
+              <div className='ui stacked secondary '>
+                <div className=' field'>
+                  <div className='ui left icon input'>
+                    <i className='user icon' />
+                    <input
+                      type='email'
+                      name='email'
+                      id='email'
+                      placeholder='E-mail address'
+                      ref={props.emailEl}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className='form-actions'>
-                <button className='ui button teal' type='submit'>
-                  {props.loginState ? "Sign in" : "Register"}
-                </button>
+                <div className=' field'>
+                  <div className='ui left icon input'>
+                    <i className='lock icon' />
+                    <input
+                      type='password'
+                      name='password'
+                      id='password'
+                      placeholder='Password'
+                      ref={props.passwordEl}
+                    />
+                  </div>
+                </div>
+                {!props.loginState && (
+                  <div className=' field'>
+                    <div className='ui left icon input'>
+                      <i className='lock icon' />
+                      <input
+                        type='password'
+                        name='password'
+                        id='password'
+                        placeholder='Repeat Password'
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className='field'>
+                  <div className='ui checkbox'>
+                    <input
+                      type='checkbox'
+                      tabindex='0'
+                      className='hidden'
+                      checked
+                    />
+                    <label>I agree to the Terms and Conditions</label>
+                  </div>
+                </div>
+                <div className='form-actions'>
+                  <button
+                    className='ui fluid large teal submit button'
+                    type='submit'
+                  >
+                    {props.loginState ? "Sign in" : "Register"}
+                  </button>
+                </div>
               </div>
             </form>
           </div>
