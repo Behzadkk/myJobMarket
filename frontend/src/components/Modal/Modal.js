@@ -20,7 +20,14 @@ const Modal = props => {
             </button>
           )}
           {props.canConfirm && (
-            <button className='ui button  teal btn' onClick={props.onConfirm}>
+            <button
+              className={
+                props.confirmText === "Delete"
+                  ? "ui button red"
+                  : "ui button teal"
+              }
+              onClick={props.onConfirm}
+            >
               {props.confirmText}
             </button>
           )}

@@ -2,33 +2,36 @@ import React from "react";
 import "./ProjectsItem.css";
 
 const ProjectsItem = props => (
-  <li key={props.projectId} className="projects__rows">
-    <div>
-      <h1>{props.title}</h1>
-      <h2>
+  <li key={props.projectId} className='item projects__rows'>
+    <div className='content'>
+      <h1 className='header'>{props.title}</h1>
+      <h2 className='meta'>
         £{props.price} - {props.createdDate}
       </h2>
     </div>
-    <div>
+    <div className='extra'>
       {props.userId === props.hirerId ? (
         <div>
-          <button className="btn" onClick={() => props.onEdit(props.projectId)}>
+          <button
+            className='ui floated  teal button'
+            onClick={() => props.onEdit(props.projectId)}
+          >
             Edit
           </button>
           <button
-            className="btn"
+            className='ui floated  red button'
             onClick={() => props.onDelete(props.projectId)}
           >
             Delete
           </button>
-          {/* these buttons needs some handler to PUT and DELETE from database */}
         </div>
       ) : (
         <button
-          className="btn"
+          className='ui floated basic teal button'
           onClick={props.onDetail.bind(this, props.projectId)}
         >
           View Details
+          <i className='right chevron icon' />
         </button>
       )}
     </div>

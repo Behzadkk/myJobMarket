@@ -30,7 +30,7 @@ const MainNavigation = props => (
                     <NavLink to='./applications'>Applications</NavLink>
                   </li>
                   <li>
-                    <button onClick={context.logout}>Logout</button>
+                    <a onClick={context.logout}>Logout</a>
                   </li>
                 </React.Fragment>
               )}

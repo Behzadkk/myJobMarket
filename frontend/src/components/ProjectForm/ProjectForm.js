@@ -5,7 +5,12 @@ const ProjectForm = props => {
     <form className='ui form'>
       <div className=' field form-control'>
         <label htmlFor='title'>Title</label>
-        <input type='text' id='title' ref={props.titleInput} />
+        <input
+          type='text'
+          id='title'
+          ref={props.titleInput}
+          
+        />
       </div>
       <div className=' field form-control'>
         <label htmlFor='price'>Price £</label>

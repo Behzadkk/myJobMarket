@@ -139,6 +139,7 @@ class ProjectsPage extends Component {
       const editingProject = prevState.projects.find(
         project => project.projectId === id
       );
+
       return { editingProject: editingProject };
     });
   };
@@ -215,40 +216,7 @@ class ProjectsPage extends Component {
 
   render() {
     return (
-      <React.Fragment>
-        {(this.state.creating ||
-          this.state.selectedProject ||
-          this.state.editingProject) && <Backdrop />}
-        {this.state.creating && (
-          <Modal
-            title="Define a Project"
-            canCancel
-            canConfirm
-            onCancel={this.modalCancelHandler}
-            onConfirm={this.modalConfirmHandler}
-            confirmText="Confirm"
-          >
-            <ProjectForm
-              titleInput={this.titleEl}
-              priceInput={this.priceEl}
-              deadlineInput={this.deadlineEl}
-              lengthInput={this.lengthEl}
-              detailsInput={this.detailsEl}
-            />
-          </Modal>
-        )}
-        {this.state.selectedProject && (
-          <Modal
-            title="Project details"
-            canCancel
-            canConfirm
-            onCancel={this.modalCancelHandler}
-            onConfirm={this.modalApplyHandler}
-            confirmText={this.context.token ? "Apply" : "OK"}
-          >
-            <ProjectDetails selectedProject={this.state.selectedProject} />
-          </Modal>
-        )}
+      <div className='ui container center'>
         {this.context.token && (
           <DefineProject clickHandler={this.startDefineProjectHandler} />
         )}
@@ -263,14 +231,49 @@ class ProjectsPage extends Component {
             onViewDelete={this.showDeleteHandler}
           />
         )}
-        {this.state.editingProject && (
+
+        {(this.state.creating ||
+          this.state.selectedProject ||
+          this.state.editingProject) && <Backdrop />}
+        {this.state.selectedProject && (
           <Modal
-            title="Edit your project"
+            title='Project details'
+            canCancel
+            canConfirm
+            onCancel={this.modalCancelHandler}
+            onConfirm={this.modalApplyHandler}
+            confirmText={this.context.token ? "Apply" : "OK"}
+          >
+            <ProjectDetails selectedProject={this.state.selectedProject} />
+          </Modal>
+        )}
+        {this.state.creating && (
+          <Modal
+            title='Define a Project'
             canCancel
             canConfirm
             onCancel={this.modalCancelHandler}
             onConfirm={this.modalConfirmHandler}
-            confirmText="Confirm"
+            confirmText='Confirm'
+          >
+            <ProjectForm
+              titleInput={this.titleEl}
+              priceInput={this.priceEl}
+              deadlineInput={this.deadlineEl}
+              lengthInput={this.lengthEl}
+              detailsInput={this.detailsEl}
+            />
+          </Modal>
+        )}
+        {this.state.editingProject && (
+          <Modal
+            title='Edit your project'
+            canCancel
+            canConfirm
+            onCancel={this.modalCancelHandler}
+            onConfirm={this.modalConfirmHandler}
+            confirmText='Confirm'
+            project={this.state.editingProject}
           >
             <ProjectForm
               titleInput={this.titleEl}
@@ -283,17 +286,17 @@ class ProjectsPage extends Component {
         )}
         {this.state.deleting && (
           <Modal
-            title="Are you sure about Deleting"
+            title='Are you sure about Deleting'
             canCancel
             canConfirm
             onCancel={this.modalCancelHandler}
             onConfirm={this.ModalDeleteHandler}
-            confirmText="Delete"
+            confirmText='Delete'
           >
             <ProjectDetails selectedProject={this.state.selectedProject} />
           </Modal>
         )}
-      </React.Fragment>
+      </div>
     );
   }
 }
