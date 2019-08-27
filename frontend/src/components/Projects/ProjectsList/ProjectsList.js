@@ -6,7 +6,7 @@ import ProjectsItem from "./ProjectsItems/ProjectsItem";
 const ProjectsList = props => {
   const projects = props.projects.map(project => {
     return (
-      <div class='ui top attached segment'>
+      <div className='ui top attached segment'>
         <ProjectsItem
           key={project.projectId}
           projectId={project.projectId}
